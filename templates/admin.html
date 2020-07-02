@@ -1,0 +1,26 @@
+{% extends "theme.html" %}
+{% block body %}
+<div class="admin-buttons">
+<a href="{{ url_for('add_place') }}">
+    <div class="button">
+        <p class="button-text">Добавить место</p></div>
+</a>
+<a href="{{ url_for('logout') }}">
+    <div class="button">
+        <p class="button-text">Выйти</p></div>
+</a>
+</div>
+<div class="places-list">
+    <table>
+        {% for place in places_list %}
+        <TR>
+            <TD class="c2">{{place.name}}</TD>
+            <TD class="c3">{{place.address}}</TD>
+            <TD class="c4"><a href="{{ url_for('remove_place',id=place.id) }}">Удалить</a></TD>
+            <TD class="c4"><a href="{{ url_for('place',id=place.id) }}">Просмотреть</a></TD>
+        </TR>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

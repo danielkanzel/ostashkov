@@ -1,0 +1,13 @@
+{% extends "theme.html" %}
+{% block body %}
+
+<body>
+    <div class="place">
+        <h1 class="place-header">{{name}}</h1>
+        <img src="{{image_url}}" alt="{{name}}" class="place-photo">
+        <p class="place-address">{{address}}</p>
+        <p class="place-text">{{description}}</p>
+    </div>
+</body>
+
+{% endblock %}

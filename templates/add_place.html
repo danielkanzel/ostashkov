@@ -1,0 +1,20 @@
+{% extends "theme.html" %}
+{% block body %}
+<form action="{{ url_for('add_place') }}" method=post>
+    <dl>
+        <dt>Название:
+        <dd><input type=text name=name maxlength="120" required>
+        <dt>URL картинки:
+        <dd><input type=text name=image_url maxlength="250">
+        <dt>Адрес:
+        <dd><input type=text name=address maxlength="250">
+        <dt>Описание:
+        <dd><input type=text name=description maxlength="6400">
+        <dt>Longitude:
+        <dd><input type=text name=longitude maxlength="12" required>
+        <dt>Latitude:
+        <dd><input type=text name=latitude maxlength="12" required>
+        <dd><input type=submit value=Отправить>
+    </dl>
+</form>
+{% endblock %}
