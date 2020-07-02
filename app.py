@@ -1,5 +1,4 @@
 import os
-import random
 from flask import Flask, request, render_template, redirect, url_for, session, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 
@@ -16,8 +15,19 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(64), index=True, unique=False)
 
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
     def __repr__(self):
         return '<User %r>' % (self.nickname)
+
+    def serialize(self):
+        return {
+            'id': self.id, 
+            'username': self.name,
+            'password': self.author
+        }
 
 class Place(db.Model):
     __tablename__ = 'places'
@@ -30,8 +40,27 @@ class Place(db.Model):
     longitude = db.Column(db.String(12), index=True, unique=False)
     latitude = db.Column(db.String(12), index=True, unique=False)
 
+    def __init__(self, name, address,image_url,description,longitude,latitude):
+        self.name = name
+        self.address = address
+        self.image_url = image_url
+        self.description = description
+        self.longitude = longitude
+        self.latitude = latitude
+
     def __repr__(self):
         return '<Place %r>' % (self.title)
+    
+    def serialize(self):
+        return {
+            'id': self.id, 
+            'name': self.name,
+            'address': self.author,
+            'image_url': self.image_url,
+            'description': self.description,
+            'longitude': self.longitude,
+            'latitude': self.latitude
+        }
 
 @app.route('/')
 def home():
