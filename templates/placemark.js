@@ -12,7 +12,7 @@ function init() {
         {% for marker in markers_list %}
 
         .add(new ymaps.Placemark([ {{marker.longitude}}, {{marker.latitude}} ], {
-            balloonContent: '{{marker.name}}'
+            balloonContent: '<a href="{{ url_for('place', id={{marker.id}}) }}">{{marker.name}}</a>'
         }, {
             iconColor: '#0095b6'
         }))
