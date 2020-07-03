@@ -91,6 +91,7 @@ def place(id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    users_list = []
     if request.method == 'POST':
         for c in Place.query.all():
             users_list.append(c.__dict__)
