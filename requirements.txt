@@ -1,5 +1,6 @@
 alembic
 flask
+sqlite
 Flask-Migrate
 Flask-Script
 Flask-SQLAlchemy

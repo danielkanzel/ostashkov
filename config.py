@@ -24,7 +24,7 @@ class DevelopmentConfig(Config):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = "real_secret"
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.abspath(os.getcwd())+"\database.db"
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.abspath(os.getcwd())+'\database.db'
     YANDEX_APIKEY = "3bda5c34-41cd-4840-8bc5-6dfe13e3aad4"
 
 
