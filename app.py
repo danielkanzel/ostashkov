@@ -74,6 +74,8 @@ def placemark():
     markers_list = []
     for c in Place.query.all():
         markers_list.append(c.__dict__)
+    for i in markers_list:
+        i[place_url] = url_for("place", id=i[id])
     return render_template('placemark.js', markers_list=markers_list)
 
 @app.route('/place/<id>')
