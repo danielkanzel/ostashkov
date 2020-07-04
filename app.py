@@ -83,6 +83,8 @@ def place(id):
     place_dict = {}
     for c in Place.query.filter_by(id=id):
         place_dict=dict(c.__dict__)
+    if place_dict.get("name") == None:
+        abort(404)
     return render_template("place.html",
                             name=place_dict.get("name"),
                             address=place_dict.get("address"),
@@ -92,19 +94,17 @@ def place(id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if session.get('logged_in'):
+        return redirect(url_for("admin"))
     error = None
     users_list = []
     if request.method == 'POST':
-        for c in Place.query.all():
+        for c in User.query.all():
             users_list.append(c.__dict__)
-        for user in users_list:
-            if user['username'] == request.form['username']:
-                if user['password'] == request.form['password']:
-                    return True
-                else:
-                    error = 'Invalid password'
-            else: 
-                error = 'Invalid username'
+        if not any(user.get('username') == request.form['username'] for user in users_list):
+            error = 'Invalid username'
+        elif not any(user.get('password') == request.form['password'] for user in users_list):
+            error = 'Invalid password'     
         else:
             session['logged_in'] = True
             flash('You were logged in')
@@ -168,6 +168,7 @@ def add_user():
     db.session.commit()
     flash('User added')
     return "done"
+
 
 
 # Run by file
