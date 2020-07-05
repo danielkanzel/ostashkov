@@ -7,60 +7,7 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy(app)
 
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    password = db.Column(db.String(64), index=True, unique=False)
-
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
-    def __repr__(self):
-        return '<User %r>' % (self.nickname)
-
-    def serialize(self):
-        return {
-            'id': self.id, 
-            'username': self.name,
-            'password': self.author
-        }
-
-class Place(db.Model):
-    __tablename__ = 'places'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), index=True, unique=False)
-    address = db.Column(db.String(250), index=True, unique=False)
-    image_url = db.Column(db.String(250), index=True, unique=False) 
-    description = db.Column(db.String(6400), index=True, unique=False)
-    longitude = db.Column(db.String(12), index=True, unique=False)
-    latitude = db.Column(db.String(12), index=True, unique=False)
-
-    def __init__(self, name, address,image_url,description,longitude,latitude):
-        self.name = name
-        self.address = address
-        self.image_url = image_url
-        self.description = description
-        self.longitude = longitude
-        self.latitude = latitude
-
-    def __repr__(self):
-        return '<Place %r>' % (self.title)
-    
-    def serialize(self):
-        return {
-            'id': self.id, 
-            'name': self.name,
-            'address': self.author,
-            'image_url': self.image_url,
-            'description': self.description,
-            'longitude': self.longitude,
-            'latitude': self.latitude
-        }
+from models import *
 
 @app.route('/')
 def home():
@@ -134,6 +81,7 @@ def add_place():
     if not session.get('logged_in'):
         abort(401)
     error = None
+    map_apikey = app.config['YANDEX_APIKEY']
     if request.method == 'POST':
         if len(request.form['name']) > 120:
             error = 'Too large title'
@@ -149,7 +97,11 @@ def add_place():
             db.session.commit()
             flash('Place added')
             return redirect(url_for('admin'))
-    return render_template('add_place.html', error=error)
+    return render_template('add_place.html', error=error, map_apikey=map_apikey)
+
+@app.route('/coordinates.js')
+def coordinates():
+    return render_template("coordinates.js")
 
 @app.route('/remove_place/<id>')
 def remove_place(id):
@@ -159,15 +111,25 @@ def remove_place(id):
     db.session.commit()
     return redirect(url_for('admin'))
 
-@app.route('/add_user')
+@app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
-    db.session.add(User(
-        username=request.args.get('username'),
-        password=request.args.get('password')
-        ))
-    db.session.commit()
-    flash('User added')
-    return "done"
+    error = None
+    users_list = []
+    if request.method == 'POST':
+        for c in User.query.all():
+            users_list.append(c.__dict__)
+        if any(user.get('username') == request.form['username'] for user in users_list):
+            error = 'User existed'    
+        else:
+            db.session.add(User(
+                username=request.form['username'],
+                password=request.form['password']
+                ))
+            db.session.commit()
+            flash('User added')
+            return redirect(url_for('admin'))
+    return render_template('add_user.html', error=error)
+
 
 
 

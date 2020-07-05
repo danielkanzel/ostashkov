@@ -1,5 +1,25 @@
 {% extends "theme.html" %}
 {% block body %}
+<body>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ map_apikey }}" type="text/javascript"></script>
+    <script src="{{ url_for('coordinates') }}" type="text/javascript"></script>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 95%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            font-size: 14px;
+        }
+        #map {
+            width: 100%;
+            height: 95%;
+        }
+        .header {
+            padding: 5px;
+        }
+    </style>
 <form action="{{ url_for('add_place') }}" method=post>
     <dl>
         <dt>Название:
@@ -7,14 +27,16 @@
         <dt>URL картинки:
         <dd><input type=text name=image_url maxlength="250">
         <dt>Адрес:
-        <dd><input type=text name=address maxlength="250">
+        <dd><input type=text id=address name=address maxlength="250">
         <dt>Описание:
         <dd><input type=text name=description maxlength="6400">
         <dt>Longitude:
-        <dd><input type=text name=longitude maxlength="12" required>
+        <dd><input type=text id=lon name=longitude maxlength="12" required>
         <dt>Latitude:
-        <dd><input type=text name=latitude maxlength="12" required>
+        <dd><input type=text id=lat name=latitude maxlength="12" required>
         <dd><input type=submit value=Отправить>
     </dl>
 </form>
+<div id="map"></div>
+</body>
 {% endblock %}

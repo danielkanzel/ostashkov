@@ -1,0 +1,17 @@
+{% extends "theme.html" %}
+{% block body %}
+
+<body>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    <form action="{{ url_for('add_user') }}" method=post>
+        <dl>
+            <dt>Логин:
+            <dd><input type=text name=username maxlength="64" required>
+            <dt>Пароль:
+            <dd><input type=text name=password maxlength="64" required>
+            <dd><input type=submit value=Отправить>
+        </dl>
+    </form>
+</body>
+
+{% endblock %}
