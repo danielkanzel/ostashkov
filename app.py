@@ -17,12 +17,13 @@ yandex_script="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={}".format(app.
 
 @app.route('/')
 def home():
-    title = "Карта славного города Осташкова"
     scripts_list = [
         yandex_script,
         url_for('placemark')
     ]
-    return render_template("home.html",title=title, scripts_list=scripts_list)
+    return render_template("home.html",
+                        title="Достопримечательности Осташкова", 
+                        scripts_list=scripts_list)
 
 @app.route('/place/<id>')
 def place(id):
@@ -32,6 +33,7 @@ def place(id):
     if place_dict.get("name") == None:
         abort(404)
     return render_template("place.html",
+                            title=place_dict.get("name"),
                             name=place_dict.get("name"),
                             address=place_dict.get("address"),
                             description=place_dict.get("description"),
@@ -54,7 +56,9 @@ def add_user():
             db.session.commit()
             flash('User added')
             return redirect(url_for('admin'))
-    return render_template('add_user.html', error=error)
+    return render_template('add_user.html', 
+                        error=error, 
+                        title="Добавление нового пользователя")
 
 # Login pages
 
@@ -75,7 +79,9 @@ def login():
             session['logged_in'] = True
             flash('You were logged in')
             return redirect(url_for("admin"))
-    return render_template("login.html",error=error)
+    return render_template("login.html",
+                            error=error,
+                            title="Вход")
 
 @app.route('/logout')
 def logout():
@@ -102,7 +108,10 @@ def admin():
         places_filter["address"]=request.args.get("address")
     for c in Place.query.filter(Place.name.like("%" + places_filter["name"] + "%")).filter(Place.address.like("%" + places_filter["address"] + "%")):
         places_list.append(c.__dict__)
-    return render_template("admin.html",places_list=places_list, scripts_list=scripts_list)
+    return render_template("admin.html",
+                        places_list=places_list, 
+                        scripts_list=scripts_list,
+                        title="Админка Достопримечательностей Осташкова")
 
 @app.route('/add_place',  methods=['GET', 'POST'])
 def add_place():
@@ -128,7 +137,53 @@ def add_place():
             db.session.commit()
             flash('Place added')
             return redirect(url_for('admin'))
-    return render_template('add_place.html', error=error, scripts_list=scripts_list)
+    return render_template('add_place.html', 
+                        error=error, 
+                        scripts_list=scripts_list,
+                        title="Добавление нового места")
+
+
+@app.route('/edit_place/<id>',  methods=['GET', 'POST'])
+def edit_place(id):
+    if not session.get('logged_in'):
+        abort(401)
+    error = None
+    scripts_list = [
+        yandex_script,
+        url_for('coordinates')
+    ]
+    place = [c.__dict__ for c in Place.query.filter_by(id=id)][0]
+    if request.method == 'POST':
+        if len(request.form['name']) > 120:
+            error = 'Too large title'
+        else:
+            Place.query.filter_by(id=id).update(dict(
+                name=request.form['name'],
+                image_url=request.form['image_url'],
+                address=request.form['address'],
+                description=request.form['description'],
+                longitude=request.form['longitude'],
+                latitude=request.form['latitude']
+                ))
+            db.session.commit()
+            flash('Place edited')
+            return redirect(url_for('admin'))
+    return render_template(
+                'edit_place.html', 
+                place=place, 
+                error=error, 
+                scripts_list=scripts_list,
+                title="Редактирование места"
+                )
+
+@app.route('/remove_place/<id>')
+def remove_place(id):
+    if not session.get('logged_in'):
+        abort(401)
+    Place.query.filter_by(id=id).delete()
+    db.session.commit()
+    return redirect(url_for('admin'))
+
 
 # Scripts
 
@@ -144,16 +199,6 @@ def placemark():
 @app.route('/coordinates.js')
 def coordinates():
     return render_template("coordinates.js")
-
-@app.route('/remove_place/<id>')
-def remove_place(id):
-    if not session.get('logged_in'):
-        abort(401)
-    Place.query.filter_by(id=id).delete()
-    db.session.commit()
-    return redirect(url_for('admin'))
-
-
 
 
 

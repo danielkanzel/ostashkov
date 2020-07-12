@@ -7,6 +7,7 @@
     {% endfor %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{{title}}</title>
 </head>
@@ -15,8 +16,8 @@
     <div class="topbar">
         <img class="gerb" src="{{ url_for('static', filename='img/Gerb.gif')}}">
         <a href="{{ request.url_root }}">
-        <h1 class="main-title" >Достопримечательности Осташкова</h1>
-    </a>
+            <h1 class="main-title">Достопримечательности Осташкова</h1>
+        </a>
         <a class="admin-button" href="{{ url_for('login') }}">
             <img class="admin-button-image" src="{{ url_for('static', filename='img/login.png')}}">
         </a>

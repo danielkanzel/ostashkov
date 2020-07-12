@@ -1,5 +1,4 @@
-{% extends "theme_admin.html" %}
-{% block body %}
+{% extends "theme_admin.html" %} {% block body %}
 <div class="places-list">
     <button type="button" class="collapsible">Фильтр</button>
     <div class="coll-content">
@@ -23,13 +22,15 @@
         <TR>
             <TH class="c2">Место</TH>
             <TH class="c3">Адрес</TH>
-            <TH class="c4">Удалялки</TH>
-            <TH class="c4">Смотрелки</TH>
+            <TH class="c4">Редактилки</TH>
+            <TH class="c5">Удалялки</TH>
+            <TH class="c6">Смотрелки</TH>
         </TR>
         {% for place in places_list %}
         <TR>
             <TD class="c2">{{place.name}}</TD>
             <TD class="c3">{{place.address}}</TD>
+            <TD class="c4"><a href="{{ url_for('edit_place',id=place.id) }}">Редактировать</a></TD>
             <TD class="c4"><a href="{{ url_for('remove_place',id=place.id) }}">Удалить</a></TD>
             <TD class="c4"><a href="{{ url_for('place',id=place.id) }}">Просмотреть</a></TD>
         </TR>

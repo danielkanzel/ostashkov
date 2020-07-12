@@ -1,0 +1,23 @@
+{% extends "theme_admin.html" %} {% block body %}
+
+<body>
+    <form class="add-place-form" action="{{ url_for('edit_place', id=place.id) }}" method=post>
+        <dl>
+            <dt>Название:
+            <dd><input type=text id=name name=name maxlength="120" value="{{ place.name }}" required>
+            <dt>URL картинки:
+            <dd><input type=text id=image_url name=image_url maxlength="250" value="{{ place.image_url }}">
+            <dt>Адрес:
+            <dd><input type=text id=address name=address maxlength="250" value="{{ place.address }}">
+            <dt>Описание:
+            <dd><textarea id=description name=description rows="8" maxlength="6400">{{ place.description }}</textarea>
+            <dt>Longitude:
+            <dd><input type=text id=lon name=longitude maxlength="12" value="{{ place.longitude }}" required>
+            <dt>Latitude:
+            <dd><input type=text id=lat name=latitude maxlength="12" value="{{ place.latitude }}" required>
+            <dd><input type=submit value=Отправить>
+        </dl>
+    </form>
+    <div id="map"></div>
+</body>
+{% endblock %}
