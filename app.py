@@ -9,21 +9,20 @@ db = SQLAlchemy(app)
 
 from models import *
 
+# Constants
+
+yandex_script="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={}".format(app.config['YANDEX_APIKEY'])
+
+# User pages
+
 @app.route('/')
 def home():
     title = "Карта славного города Осташкова"
-    map_apikey = app.config['YANDEX_APIKEY']
-    login_url = url_for("login")
-    return render_template("home.html",title=title, map_apikey=map_apikey, login_url=login_url)
-
-@app.route('/placemark.js')
-def placemark():
-    markers_list = []
-    for c in Place.query.all():
-        markers_list.append(c.__dict__)
-    for i in markers_list:
-        i["place_url"] = url_for("place", id=i["id"])
-    return render_template('placemark.js', markers_list=markers_list)
+    scripts_list = [
+        yandex_script,
+        url_for('placemark')
+    ]
+    return render_template("home.html",title=title, scripts_list=scripts_list)
 
 @app.route('/place/<id>')
 def place(id):
@@ -38,6 +37,26 @@ def place(id):
                             description=place_dict.get("description"),
                             image_url=place_dict.get("image_url"))
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    error = None
+    users_list = []
+    if request.method == 'POST':
+        for c in User.query.all():
+            users_list.append(c.__dict__)
+        if any(user.get('username') == request.form['username'] for user in users_list):
+            error = 'User existed'    
+        else:
+            db.session.add(User(
+                username=request.form['username'],
+                password=request.form['password']
+                ))
+            db.session.commit()
+            flash('User added')
+            return redirect(url_for('admin'))
+    return render_template('add_user.html', error=error)
+
+# Login pages
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,22 +85,34 @@ def logout():
     flash('You were logged out')
     return redirect(request.url_root)
 
+# Admin pages
 
 @app.route('/admin')
 def admin():
     if not session.get('logged_in'):
         abort(401)
+    scripts_list = [
+        url_for('static', filename='js/collapsible.js')
+    ]
     places_list = []
-    for c in Place.query.all():
+    places_filter={"name":"","address":""}
+    if request.args.get("name"):
+        places_filter["name"]=request.args.get("name")
+    if request.args.get("address"):
+        places_filter["address"]=request.args.get("address")
+    for c in Place.query.filter(Place.name.like("%" + places_filter["name"] + "%")).filter(Place.address.like("%" + places_filter["address"] + "%")):
         places_list.append(c.__dict__)
-    return render_template("admin.html",places_list=places_list)
+    return render_template("admin.html",places_list=places_list, scripts_list=scripts_list)
 
 @app.route('/add_place',  methods=['GET', 'POST'])
 def add_place():
     if not session.get('logged_in'):
         abort(401)
     error = None
-    map_apikey = app.config['YANDEX_APIKEY']
+    scripts_list = [
+        yandex_script,
+        url_for('coordinates')
+    ]
     if request.method == 'POST':
         if len(request.form['name']) > 120:
             error = 'Too large title'
@@ -97,7 +128,18 @@ def add_place():
             db.session.commit()
             flash('Place added')
             return redirect(url_for('admin'))
-    return render_template('add_place.html', error=error, map_apikey=map_apikey)
+    return render_template('add_place.html', error=error, scripts_list=scripts_list)
+
+# Scripts
+
+@app.route('/placemark.js')
+def placemark():
+    markers_list = []
+    for c in Place.query.all():
+        markers_list.append(c.__dict__)
+    for i in markers_list:
+        i["place_url"] = url_for("place", id=i["id"])
+    return render_template('placemark.js', markers_list=markers_list)
 
 @app.route('/coordinates.js')
 def coordinates():
@@ -111,24 +153,7 @@ def remove_place(id):
     db.session.commit()
     return redirect(url_for('admin'))
 
-@app.route('/add_user', methods=['GET', 'POST'])
-def add_user():
-    error = None
-    users_list = []
-    if request.method == 'POST':
-        for c in User.query.all():
-            users_list.append(c.__dict__)
-        if any(user.get('username') == request.form['username'] for user in users_list):
-            error = 'User existed'    
-        else:
-            db.session.add(User(
-                username=request.form['username'],
-                password=request.form['password']
-                ))
-            db.session.commit()
-            flash('User added')
-            return redirect(url_for('admin'))
-    return render_template('add_user.html', error=error)
+
 
 
 

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+<head>
+    {% for script in scripts_list %}
+    <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+    <script src="{{ url_for('static', filename='js/admin_menu.js') }}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <div class="topnav">
+        <a id="admin" href="{{url_for('admin')}}">Список мест</a>
+        <a id="add_place" href="{{url_for('add_place')}}">Добавить место</a>
+        <a id="add_user" href="{{url_for('add_user')}}">Добавить учетку</a>
+        <a id="logout" href="{{url_for('logout')}}">Выйти</a>
+      </div>
+    {% block body %}{% endblock %}
+</body>
+
+</html>

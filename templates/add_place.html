@@ -1,42 +1,24 @@
-{% extends "theme.html" %}
+{% extends "theme_admin.html" %}
 {% block body %}
+
 <body>
-<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey={{ map_apikey }}" type="text/javascript"></script>
-    <script src="{{ url_for('coordinates') }}" type="text/javascript"></script>
-    <style type="text/css">
-        html, body {
-            width: 100%;
-            height: 95%;
-            margin: 0;
-            padding: 0;
-            font-family: Arial;
-            font-size: 14px;
-        }
-        #map {
-            width: 100%;
-            height: 95%;
-        }
-        .header {
-            padding: 5px;
-        }
-    </style>
-<form action="{{ url_for('add_place') }}" method=post>
-    <dl>
-        <dt>Название:
-        <dd><input type=text name=name maxlength="120" required>
-        <dt>URL картинки:
-        <dd><input type=text name=image_url maxlength="250">
-        <dt>Адрес:
-        <dd><input type=text id=address name=address maxlength="250">
-        <dt>Описание:
-        <dd><input type=text name=description maxlength="6400">
-        <dt>Longitude:
-        <dd><input type=text id=lon name=longitude maxlength="12" required>
-        <dt>Latitude:
-        <dd><input type=text id=lat name=latitude maxlength="12" required>
-        <dd><input type=submit value=Отправить>
-    </dl>
-</form>
-<div id="map"></div>
+    <form class="add-place-form" action="{{ url_for('add_place') }}" method=post>
+        <dl>
+            <dt>Название:
+            <dd><input type=text id=name name=name maxlength="120" required>
+            <dt>URL картинки:
+            <dd><input type=text id=image_url name=image_url maxlength="250">
+            <dt>Адрес:
+            <dd><input type=text id=address name=address maxlength="250">
+            <dt>Описание:
+            <dd><textarea id=description name=description rows="8" maxlength="6400"></textarea>
+            <dt>Longitude:
+            <dd><input type=text id=lon name=longitude maxlength="12" required>
+            <dt>Latitude:
+            <dd><input type=text id=lat name=latitude maxlength="12" required>
+            <dd><input type=submit value=Отправить>
+        </dl>
+    </form>
+    <div id="map"></div>
 </body>
 {% endblock %}

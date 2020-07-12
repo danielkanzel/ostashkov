@@ -3,8 +3,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    YANDEX_APIKEY = os.environ['YANDEX_APIKEY'] 
+    SQLALCHEMY_TRACK_MODIFICATIONS = True 
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -12,8 +11,7 @@ class ProductionConfig(Config):
     CSRF_ENABLED = True
     SECRET_KEY = os.environ['SECRET']
     SQLALCHEMY_DATABASE_URI = os.environ['HEROKU_POSTGRESQL_JADE_URL'] 
-    
-
+    YANDEX_APIKEY = os.environ['YANDEX_APIKEY']
 
 
 class StagingConfig(Config):
@@ -27,6 +25,7 @@ class DevelopmentConfig(Config):
     CSRF_ENABLED = True
     SECRET_KEY = "real_secret"
     SQLALCHEMY_DATABASE_URI = 'sqlite:///'+os.path.abspath(os.getcwd())+'\database.db'
+    YANDEX_APIKEY = os.environ['YANDEX_APIKEY']
 
 
 class TestingConfig(Config):

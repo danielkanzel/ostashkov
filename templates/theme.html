@@ -2,10 +2,20 @@
 <html>
 
 <head>
+    {% for script in scripts_list %}
+    <script src="{{ script }}" type="text/javascript"></script>
+    {% endfor %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>{{title}}</title>
 </head>
 
-{% block body %}{% endblock %}
+<body>
+    <div class="topbar">
+        <h1 class="main-title">Достопримечательности Осташкова</h1>
+    </div>
+    {% block body %}{% endblock %}
+</body>
 
 </html>

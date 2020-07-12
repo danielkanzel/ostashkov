@@ -1,0 +1,35 @@
+html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            font-size: 14px;
+            background-color: #f0ece3;
+        }
+
+        #map {
+            width: 80%;
+            height: 90%;
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+h1 {
+    padding: 5px;
+    margin: 0;
+}
+.topbar {
+    width: 100%;
+    height: 10%;
+    background-color: #c7b198;
+}
+
+    .main-title {
+        color: #596e79;
+    }
+
+    .content {
+        width: 100%;
+        height: 100%;
+    }

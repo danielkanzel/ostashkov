@@ -1,17 +1,16 @@
-{% extends "theme.html" %}
+{% extends "theme_admin.html" %}
 {% block body %}
 
-<body>
-    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-    <form action="{{ url_for('add_user') }}" method=post>
-        <dl>
-            <dt>Логин:
-            <dd><input type=text name=username maxlength="64" required>
-            <dt>Пароль:
-            <dd><input type=text name=password maxlength="64" required>
-            <dd><input type=submit value=Отправить>
-        </dl>
-    </form>
-</body>
+{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+<form class="user-add-form" action="{{ url_for('add_user') }}" method=post>
+    <dl>
+        <dt>Логин:
+        <dd><input type=text name=username maxlength="64" required>
+        <dt>Пароль:
+        <dd><input type=text name=password maxlength="64" required>
+        <dd><input type=submit value=Отправить>
+    </dl>
+</form>
+
 
 {% endblock %}
