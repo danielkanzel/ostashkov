@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "Pribambas";
+    src: url("/static/fonts/Pribambas-Regular.woff2") format("woff2"),
+         url("/static/fonts/Pribambas-Regular.woff") format("woff"),
+         url("/static/fonts/Pribambas-Regular.eot") format("eot");
+   }
+
 html,
         body {
             width: 100%;
@@ -23,13 +30,45 @@ h1 {
     width: 100%;
     height: 10%;
     background-color: #c7b198;
+    display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;     /*Центрирование по вертикали */
+
 }
 
     .main-title {
         color: #596e79;
-    }
+        font-family: "Pribambas";
+}
 
     .content {
         width: 100%;
         height: 100%;
+    }
+
+    .gerb {
+        height: 80%;
+        margin-right: 20px;
+        margin-left: auto;
+    }
+    .admin-button {
+        margin-left: auto;
+        height: 50%;
+        margin-right: 20px;
+    }
+    .admin-button-image {
+        width: 25px;
+    }
+    .place{
+        width: 500px;
+        margin-left: auto;
+    margin-right: auto;
+    }
+
+    .place-photo {
+        width: inherit;
+    }
+
+    a {
+        text-decoration: none;
     }

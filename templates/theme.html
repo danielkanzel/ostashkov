@@ -13,7 +13,13 @@
 
 <body>
     <div class="topbar">
-        <h1 class="main-title">Достопримечательности Осташкова</h1>
+        <img class="gerb" src="{{ url_for('static', filename='img/Gerb.gif')}}">
+        <a href="{{ request.url_root }}">
+        <h1 class="main-title" >Достопримечательности Осташкова</h1>
+    </a>
+        <a class="admin-button" href="{{ url_for('login') }}">
+            <img class="admin-button-image" src="{{ url_for('static', filename='img/login.png')}}">
+        </a>
     </div>
     {% block body %}{% endblock %}
 </body>
